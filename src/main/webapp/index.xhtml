@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head> <!-- head = cabeçalho -->
+
+</h:head>
+
+<h:body> <!-- body = corpo -->
+
+    <h:form>
+        <p:breadCrumb>
+            <p:menuitem/>
+            <p:menuitem value="Página JSF" action="index.xhtml"/>
+            <p:menuitem value="Página PrimeFaces" action="primefaces.xhtml"/>
+        </p:breadCrumb>
+    </h:form>
+
+    <h:form> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
+        <h:messages showDetail="true" showSummary="false"/>
+        <h:panelGrid columns="2">
+            <h:outputLabel>Id:</h:outputLabel>
+            <h:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/> <!-- readonly = vai ser usado para carregar o id automaticamente -->
+
+            <h:outputLabel>Nome:</h:outputLabel>                                 <!-- required = vai indicar que o nome vai ter ser obrigatório -->
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" />
+
+            <h:outputLabel>Sobrenome:</h:outputLabel>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
+
+            <h:outputLabel>Idade:</h:outputLabel>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.idade}"/>
+
+            <h:outputLabel>Sexo</h:outputLabel>
+            <h:selectOneMenu value="#{usuarioPessoaManagedBean.usuarioPessoa.sexo}">
+                <f:selectItem itemValue="MASCULINO"/>
+                <f:selectItem itemValue="FEMININO"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel>Email:</h:outputLabel>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.email}"/>
+
+            <h:outputLabel>Login:</h:outputLabel>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.login}"/>
+
+            <h:outputLabel>Senha:</h:outputLabel>
+            <h:inputSecret value="#{usuarioPessoaManagedBean.usuarioPessoa.senha}"/>
+        </h:panelGrid>
+
+        <br/>
+        <br/>
+        <h:commandButton value="Salvar" action="#{usuarioPessoaManagedBean.salvar}"/>
+        <h:commandButton value="Novo" action="#{usuarioPessoaManagedBean.novo}"/>
+        <br/>
+        <br/>
+    </h:form>
+    <h:form>                                                                                <!-- var="user" = cria uma variavel para eu acessar "usuarioPessoaManagedBean" -->
+        <p:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" border="1" cellpadding="15">  <!-- dataTable = cria uma tabela para a exibição dos dados -->
+            <f:facet name="header">Lista de usuários</f:facet>                                     <!-- cellpadding = vai servir para eu dar espaçamento na tabela -->
+
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{user.id}"/> <!-- outputText = cria o campo para a exibição do meu valor, nesse caso "id" -->
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                <h:outputText value="#{user.nome}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Sobrenome</f:facet>
+                <h:outputText value="#{user.sobrenome}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Email</f:facet>
+                <h:outputText value="#{user.email}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Login</f:facet>
+                <h:outputText value="#{user.login}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Idade</f:facet>
+                <h:outputText value="#{user.idade}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Editar</f:facet>
+                <h:commandLink value="Editar">
+                    <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
+                </h:commandLink>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Excluir</f:facet>
+                <h:commandLink value="Excluir" action="#{usuarioPessoaManagedBean.remover}">
+                    <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
+                </h:commandLink>
+            </h:column>
+        </p:dataTable>
+
+    </h:form>
+
+</h:body>
+</html>
