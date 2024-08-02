@@ -2,9 +2,11 @@ package br.com.avancard.model;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 @Entity
-public class TelefoneUser {
+public class TelefoneUser implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

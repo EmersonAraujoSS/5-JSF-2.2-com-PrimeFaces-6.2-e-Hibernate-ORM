@@ -34,7 +34,7 @@ public class GenericDao<E> implements Serializable {
         return e;
     }
 
-    public void deletarPoId(E entidade){
+    public void deletarPoId(E entidade) throws Exception{
 
         Object id = HibernateUtil.getPrimaryKey(entidade);
 

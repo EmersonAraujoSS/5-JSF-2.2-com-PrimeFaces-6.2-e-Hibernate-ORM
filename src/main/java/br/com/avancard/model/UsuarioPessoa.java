@@ -5,7 +5,9 @@ import javax.persistence.*;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @NamedQueries({
@@ -14,7 +16,8 @@ import java.util.List;
         @NamedQuery(name = "UsuarioPessoa.buscaPorNome", query = "select u from UsuarioPessoa u where u.nome = :nome")
 })
 
-public class UsuarioPessoa {
+public class UsuarioPessoa implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     //ATRIBUTOS
     @Id
@@ -88,6 +91,20 @@ public class UsuarioPessoa {
     }
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioPessoa that = (UsuarioPessoa) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
 
