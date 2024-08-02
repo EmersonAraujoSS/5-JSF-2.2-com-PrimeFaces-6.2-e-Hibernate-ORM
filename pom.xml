@@ -107,6 +107,13 @@
             <version>12.4.2.jre8</version>
         </dependency>
 
+        <!-- Gson dependency -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10</version>
+        </dependency>
+
         <!-- Weld (implementação do CDI) -->
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>

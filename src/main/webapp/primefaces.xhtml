@@ -23,37 +23,52 @@
 
     <h:form> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
         <h:messages showDetail="true" showSummary="false"/>
-        <p:panelGrid columns="2">
-            <h:outputLabel>Id:</h:outputLabel>
-            <p:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/> <!-- readonly = vai ser usado para carregar o id automaticamente -->
 
-            <h:outputLabel>Nome:</h:outputLabel>                                 <!-- required = vai indicar que o nome vai ter ser obrigatório -->
-            <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!"/>
+        <p:panelGrid columns="1">
+            <p:column>
+                <p:outputLabel>Id:</p:outputLabel>
+                <p:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/> <!-- readonly = vai ser usado para carregar o id automaticamente -->
+            </p:column>
 
-            <h:outputLabel>Sobrenome:</h:outputLabel>
-            <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
+            <p:column>
+                <p:outputLabel>Nome:</p:outputLabel>                                 <!-- required = vai indicar que o nome vai ter ser obrigatório -->
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!"/>
+            </p:column>
 
-            <h:outputLabel>Idade:</h:outputLabel>
-            <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.idade}"/>
+            <p:column>
+                <p:outputLabel>Sobrenome:</p:outputLabel>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
+            </p:column>
 
-            <h:outputLabel>Email:</h:outputLabel>
-            <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.email}"/>
+            <p:column>
+                <p:outputLabel>Idade:</p:outputLabel>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.idade}"/>
+            </p:column>
 
-            <h:outputLabel>Login:</h:outputLabel>
-            <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.login}"/>
+            <p:column>
+                <p:outputLabel>Email:</p:outputLabel>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.email}"/>
+            </p:column>
 
-            <h:outputLabel>Senha:</h:outputLabel>
-            <p:password value="#{usuarioPessoaManagedBean.usuarioPessoa.senha}"/>
+            <p:column>
+                <p:outputLabel>Login:</p:outputLabel>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.login}"/>
+            </p:column>
+
+            <p:column>
+                <p:outputLabel>Senha:</p:outputLabel>
+                <p:password value="#{usuarioPessoaManagedBean.usuarioPessoa.senha}"/>
+            </p:column>
         </p:panelGrid>
 
         <br/>
         <br/>
-        <p:commandButton value="Salvar" action="#{usuarioPessoaManagedBean.salvar}"/>
+        <p:commandButton value="Salvar" ajax="false" action="#{usuarioPessoaManagedBean.salvar}"/> <!--ajax = eu preciso colocar o ajax para poder enviar a resposta do para o servidor e salvar -->
         <p:commandButton value="Novo" action="#{usuarioPessoaManagedBean.novo}"/>
         <br/>
         <br/>
         <!-- var="user" = cria uma variavel para eu acessar "usuarioPessoaManagedBean" -->
-        <p:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" border="1" cellpadding="15">  <!-- dataTable = cria uma tabela para a exibição dos dados -->
+        <h:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" border="1" cellpadding="15">  <!-- dataTable = cria uma tabela para a exibição dos dados -->
             <f:facet name="header">Lista de usuários</f:facet>                                     <!-- cellpadding = vai servir para eu dar espaçamento na tabela -->
 
             <h:column>
@@ -99,7 +114,7 @@
                     <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
                 </h:commandLink>
             </h:column>
-        </p:dataTable>
+        </h:dataTable>
 
     </h:form>
 

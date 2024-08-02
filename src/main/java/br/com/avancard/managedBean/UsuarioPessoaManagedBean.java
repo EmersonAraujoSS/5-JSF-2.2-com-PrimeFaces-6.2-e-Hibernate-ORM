@@ -3,13 +3,20 @@ package br.com.avancard.managedBean;
 import br.com.avancard.dao.GenericDao;
 import br.com.avancard.dao.UsuarioDao;
 import br.com.avancard.model.UsuarioPessoa;
+import com.google.gson.Gson;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +45,13 @@ public class UsuarioPessoaManagedBean implements Serializable {
         return "";
     }
 
+
     public String novo(){
 
         usuarioPessoa = new UsuarioPessoa();
         return "";
     }
+
 
     public String remover() throws Exception {
 
@@ -60,6 +69,46 @@ public class UsuarioPessoaManagedBean implements Serializable {
             }
         }
         return "";
+    }
+
+
+    private void mostrarMsg(String msg) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage message = new FacesMessage(msg);
+        context.addMessage(null, message);
+    }
+
+
+    public void pesquisacep(AjaxBehaviorEvent event) {
+
+        try {
+            URL url = new URL("https://viacep.com.br/ws/" + usuarioPessoa.getCep() + "/json/"); //consumindo WEB SERVICE DE CEP
+            URLConnection connection = url.openConnection(); //URLConnection = iniciando minha conexão de cep
+            InputStream inputStream = connection.getInputStream();  //InputStream = executa as configurações no servidor e retorna a informação
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8")); //BufferedReader = vai ser usado para fazer leitura de fluxo de dados
+
+            String cep = "";
+            StringBuilder jsonCep = new StringBuilder(); //StringBuilder = facilita a criação e manipulação de strings de maneira eficiente.
+
+            while ((cep = br.readLine()) != null) {
+                jsonCep.append(cep);  //append = adicionar um novo elemento ao final da lista.
+            }
+
+            UsuarioPessoa userCepPessoa = new Gson().fromJson(jsonCep.toString(), UsuarioPessoa.class);
+            usuarioPessoa.setCep(userCepPessoa.getCep());
+            usuarioPessoa.setLogradouro(userCepPessoa.getLogradouro());
+            usuarioPessoa.setComplemento(userCepPessoa.getComplemento());
+            usuarioPessoa.setUf(userCepPessoa.getUf());
+            usuarioPessoa.setBairro(userCepPessoa.getBairro());
+            usuarioPessoa.setLocalidade(userCepPessoa.getLocalidade());
+            usuarioPessoa.setUnidade(userCepPessoa.getUnidade());
+            usuarioPessoa.setIbge(userCepPessoa.getIbge());
+            usuarioPessoa.setGia(userCepPessoa.getGia());
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            mostrarMsg("Erro ao consultar o CEP");
+        }
     }
 
 

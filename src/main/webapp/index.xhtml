@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head> <!-- head = cabeçalho -->
 
@@ -27,8 +28,9 @@
             <h:outputLabel>Id:</h:outputLabel>
             <h:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/> <!-- readonly = vai ser usado para carregar o id automaticamente -->
 
+            <h:outputLabel/>
             <h:outputLabel>Nome:</h:outputLabel>                              <!-- required = vai indicar que o nome vai ter ser obrigatório -->
-            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" />
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" pt:placeholder="Informe o nome do usuário" /> <!--placeholder = deixa mensagem dentro do campo de texto -->
 
             <h:outputLabel>Sobrenome:</h:outputLabel>
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
@@ -44,6 +46,37 @@
 
             <h:outputLabel>Email:</h:outputLabel>
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.email}"/>
+
+            <h:outputLabel>Cep:</h:outputLabel>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.cep}" pt:placeholder="Informe um cep válido">
+                <f:ajax event="blur" execute="@this" listener="#{usuarioPessoaManagedBean.pesquisacep}"
+                        render="logradouro complemento bairro localidade uf unidade ibge gia"/>  <!--ajax = uso o ajax para eu recarregar apenas o dados do cep quando perder o foco-->
+            </h:inputText>                                  <!-- event="blur" = sifnifica perda de foco -->                 <!-- render = vai carregar o logradouro assim que eu colocar o cep-->
+
+            <h:outputLabel/>
+            <h:outputLabel value="Logradouro:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.logradouro}" id="logradouro"/>
+
+            <h:outputLabel value="Complemento:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.complemento}" id="complemento"/>
+
+            <h:outputLabel value="Bairro:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.bairro}" id="bairro"/>
+
+            <h:outputLabel value="Localidade:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.localidade}" id="localidade"/>
+
+            <h:outputLabel value="UF:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.uf}" id="uf"/>
+
+            <h:outputLabel value="Unidade:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.unidade}" id="unidade"/>
+
+            <h:outputLabel value="Ibge:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.ibge}" id="ibge"/>
+
+            <h:outputLabel value="Gia:"/>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.gia}" id="gia"/>
 
             <h:outputLabel>Login:</h:outputLabel>
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.login}"/>
@@ -114,7 +147,7 @@
 
             <h:column>
                 <f:facet name="header">Telefones</f:facet>
-                <h:commandLink immediate="true" action="#{telefoneManagedBean.init}" id="botaofone">
+                <h:commandLink immediate="true" action="telefone.xhtml" id="botaofone">
                     <h:graphicImage url="resources/imagens/icon-telefone.png" width="48" height="48"/>
                     <f:param name="codigouser" value="#{user.id}"/>
                 </h:commandLink>
