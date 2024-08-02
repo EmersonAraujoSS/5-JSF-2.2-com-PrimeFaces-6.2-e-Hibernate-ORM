@@ -45,7 +45,7 @@ public class TesteHibernate {
     }
 
     @Test
-    public void testeDelete() {
+    public void testeDelete() throws Exception {
         GenericDao<UsuarioPessoa> genericDao = new GenericDao<UsuarioPessoa>();
         UsuarioPessoa pessoa = genericDao.pesquisar(5l, UsuarioPessoa.class);
 

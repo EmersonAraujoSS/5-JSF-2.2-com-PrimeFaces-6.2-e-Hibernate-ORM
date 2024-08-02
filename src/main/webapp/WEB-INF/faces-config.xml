@@ -10,4 +10,10 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>telefoneManagedBean</managed-bean-name>
+        <managed-bean-class>br.com.avancard.managedBean.TelefoneManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
 </faces-config>
