@@ -21,13 +21,13 @@
         </p:breadCrumb>
     </h:form>
 
-    <h:form> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
-        <h:messages showDetail="true" showSummary="false"/>
+    <h:form id="formulario"> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
+        <h:messages showDetail="true" showSummary="false" id="msg"/>
         <h:panelGrid columns="2">
             <h:outputLabel>Id:</h:outputLabel>
             <h:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/> <!-- readonly = vai ser usado para carregar o id automaticamente -->
 
-            <h:outputLabel>Nome:</h:outputLabel>                                 <!-- required = vai indicar que o nome vai ter ser obrigatório -->
+            <h:outputLabel>Nome:</h:outputLabel>                              <!-- required = vai indicar que o nome vai ter ser obrigatório -->
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" />
 
             <h:outputLabel>Sobrenome:</h:outputLabel>
@@ -52,6 +52,7 @@
             <h:inputSecret value="#{usuarioPessoaManagedBean.usuarioPessoa.senha}"/>
         </h:panelGrid>
 
+
         <br/>
         <br/>
         <h:commandButton value="Salvar" action="#{usuarioPessoaManagedBean.salvar}"/>
@@ -59,8 +60,9 @@
         <br/>
         <br/>
     </h:form>
-    <h:form>                                                                                <!-- var="user" = cria uma variavel para eu acessar "usuarioPessoaManagedBean" -->
-        <p:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" border="1" cellpadding="15">  <!-- dataTable = cria uma tabela para a exibição dos dados -->
+
+    <h:form id="formTable">                                              <!-- var="user" = cria uma variavel para eu acessar "usuarioPessoaManagedBean" -->
+        <h:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" border="1" cellpadding="15">  <!-- dataTable = cria uma tabela para a exibição dos dados -->
             <f:facet name="header">Lista de usuários</f:facet>                                     <!-- cellpadding = vai servir para eu dar espaçamento na tabela -->
 
             <h:column>
@@ -95,18 +97,29 @@
 
             <h:column>
                 <f:facet name="header">Editar</f:facet>
-                <h:commandLink value="Editar">
+                <h:commandLink immediate="true" id="botaoeditar">
                     <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
+                    <h:graphicImage url="resources/imagens/icon-editar.png"/>
+                    <f:ajax execute="botaoeditar" render="@form :formulario:msg"/>
                 </h:commandLink>
             </h:column>
 
             <h:column>
                 <f:facet name="header">Excluir</f:facet>
-                <h:commandLink value="Excluir" action="#{usuarioPessoaManagedBean.remover}">
+                <h:commandLink immediate="true" action="#{usuarioPessoaManagedBean.remover}">
+                    <h:graphicImage url="resources/imagens/icon-remover.png"/>
                     <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
                 </h:commandLink>
             </h:column>
-        </p:dataTable>
+
+            <h:column>
+                <f:facet name="header">Telefones</f:facet>
+                <h:commandLink immediate="true" action="#{telefoneManagedBean.init}" id="botaofone">
+                    <h:graphicImage url="resources/imagens/icon-telefone.png" width="48" height="48"/>
+                    <f:param name="codigouser" value="#{user.id}"/>
+                </h:commandLink>
+            </h:column>
+        </h:dataTable>
 
     </h:form>
 

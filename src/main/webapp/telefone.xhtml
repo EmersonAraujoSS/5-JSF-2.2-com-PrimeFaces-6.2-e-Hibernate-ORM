@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head> <!-- head = cabeçalho -->
+
+</h:head>
+
+<h:body> <!-- body = corpo -->
+
+    <h:form>
+        <p:breadCrumb>
+            <p:menuitem/>
+            <p:menuitem value="Página JSF" action="index.xhtml"/>
+            <p:menuitem value="Página PrimeFaces" action="primefaces.xhtml"/>
+        </p:breadCrumb>
+    </h:form>
+
+    <h:form id="formulario"> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
+        <h:messages showDetail="true" showSummary="false" id="msg"/>
+
+        <h1>Telefones</h1>
+        <h:outputText value="#{telefoneManagedBean}"/>
+
+    </h:form>
+
+
+
+</h:body>
+</html>
