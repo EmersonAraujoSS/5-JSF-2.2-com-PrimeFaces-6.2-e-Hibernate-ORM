@@ -30,22 +30,22 @@
 
             <h:outputLabel/>
             <h:outputLabel>Nome:</h:outputLabel>                              <!-- required = vai indicar que o nome vai ter ser obrigatório -->
-            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" pt:placeholder="Informe o nome do usuário" /> <!--placeholder = deixa mensagem dentro do campo de texto -->
-
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" pt:placeholder="Informe o nome do usuário" />
+                                                                                                                                     <!--placeholder = deixa mensagem dentro do campo de texto -->
             <h:outputLabel>Sobrenome:</h:outputLabel>
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
 
             <h:outputLabel>Idade:</h:outputLabel>
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.idade}"/>
 
+            <h:outputLabel>Salário:</h:outputLabel>
+            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.salario}"/>
+
             <h:outputLabel>Sexo</h:outputLabel>
             <h:selectOneMenu value="#{usuarioPessoaManagedBean.usuarioPessoa.sexo}">
                 <f:selectItem itemValue="MASCULINO"/>
                 <f:selectItem itemValue="FEMININO"/>
             </h:selectOneMenu>
-
-            <h:outputLabel>Email:</h:outputLabel>
-            <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.email}"/>
 
             <h:outputLabel>Cep:</h:outputLabel>
             <h:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.cep}" pt:placeholder="Informe um cep válido">
@@ -99,23 +99,18 @@
             <f:facet name="header">Lista de usuários</f:facet>                                     <!-- cellpadding = vai servir para eu dar espaçamento na tabela -->
 
             <h:column>
-                <f:facet name="header">Id</f:facet>
+                <f:facet name="header">Id:</f:facet>
                 <h:outputText value="#{user.id}"/> <!-- outputText = cria o campo para a exibição do meu valor, nesse caso "id" -->
             </h:column>
 
             <h:column>
-                <f:facet name="header">Nome</f:facet>
+                <f:facet name="header">Nome:</f:facet>
                 <h:outputText value="#{user.nome}"/>
             </h:column>
 
             <h:column>
-                <f:facet name="header">Sobrenome</f:facet>
+                <f:facet name="header">Sobrenome:</f:facet>
                 <h:outputText value="#{user.sobrenome}"/>
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Email</f:facet>
-                <h:outputText value="#{user.email}"/>
             </h:column>
 
             <h:column>
@@ -126,6 +121,11 @@
             <h:column>
                 <f:facet name="header">Idade</f:facet>
                 <h:outputText value="#{user.idade}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Salário</f:facet>
+                <h:outputText value="#{user.salario}"/>
             </h:column>
 
             <h:column>

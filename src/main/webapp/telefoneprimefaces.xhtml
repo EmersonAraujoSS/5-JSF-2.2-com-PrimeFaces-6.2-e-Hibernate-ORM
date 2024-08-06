@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head> <!-- head = cabeçalho -->
+
+</h:head>
+
+<h:body> <!-- body = corpo -->
+
+    <h:form>
+        <p:breadCrumb>
+            <p:menuitem/>
+            <p:menuitem value="Página JSF" action="index.xhtml"/>
+            <p:menuitem value="Página PrimeFaces" action="primefaces.xhtml"/>
+        </p:breadCrumb>
+    </h:form>
+
+    <h:form id="formulario"> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
+        <p:messages autoUpdate="true" showDetail="true" />  <!-- autoUpdate = vai buscar se tem mensagem para mostrar (vai buscar a mensagem no managedbean)-->
+        <br/>                                                        <!-- showDetail = vai fazer sumir a mensagem depois de um tempo -->
+        <br/>
+
+        <p:panelGrid columns="2"> <!-- panelGrid = serve para organizar  -->
+
+            <p:outputLabel/>
+            <p:outputLabel>Usuário:</p:outputLabel>
+            <h:outputText value="#{telefoneManagedBean.user.nome}"/>
+
+            <p:outputLabel>Número:</p:outputLabel>
+            <p:inputText value="#{telefoneManagedBean.telefone.numero}" required="true" requiredMessage="Número obrigatório"/>
+
+            <p:outputLabel>Tipo:</p:outputLabel>
+            <p:inputText value="#{telefoneManagedBean.telefone.tipo}" required="true" requiredMessage="Tipo obrigatório"/>
+        </p:panelGrid>
+
+        <br/>
+        <br/>
+        <p:commandButton value="Salvar" action="#{telefoneManagedBean.salvar}" ajax="false"/> <!--ajax = eu preciso colocar o ajax para poder enviar a resposta do para o servidor e salvar -->
+        <br/>
+        <br/>
+    </h:form>
+
+    <h:form id="formTelefones">
+        <p:dataTable value="#{telefoneManagedBean.user.telefoneUsers}" var="fone" id="tabelFone">
+
+            <p:column headerText="ID">
+                <h:outputText value="#{fone.id}"/> <!-- outputText = cria o campo para a exibição do meu valor, nesse caso "id" -->
+            </p:column>
+
+            <p:column headerText="Número">
+                <h:outputText value="#{fone.numero}"/>
+            </p:column>
+
+            <p:column headerText="Tipo">
+                <h:outputText value="#{fone.tipo}"/>
+            </p:column>
+
+            <p:column headerText="Excluir">
+                <h:commandLink immediate="true" action="#{telefoneManagedBean.removeTelefone}" id="botaoexcluir">
+                    <h:graphicImage url="resources/imagens/icon-remover.png"/>
+                    <f:setPropertyActionListener value="#{fone}" target="#{telefoneManagedBean.telefone}"/>
+                        <f:ajax execute="botaoexcluir" render="@form :formulario:msg"/>
+                </h:commandLink>
+            </p:column>
+
+        </p:dataTable>
+
+    </h:form>
+
+
+
+</h:body>
+</html>

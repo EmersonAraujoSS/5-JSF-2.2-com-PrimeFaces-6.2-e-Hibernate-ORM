@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head> <!-- head = cabeçalho -->
 
@@ -21,102 +22,180 @@
         </p:breadCrumb>
     </h:form>
 
-    <h:form> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
-        <h:messages showDetail="true" showSummary="false"/>
+    <h:form id="formulario"> <!-- form = a minha tela jsf vai sempre ter que estar dentro de um formulário -->
+        <!--growl = vai informar mensagens ao lado direito da tela -->
+        <p:growl id="messages" showDetail="true">   <!-- autoUpdate = vai buscar se tem mensagem para mostrar (vai buscar a mensagem no managedbean)-->
+            <p:autoUpdate/>               <!-- showDetail = vai fazer sumir a mensagem depois de um tempo -->
+        </p:growl>
+        <br/>
+        <br/>
+        <p:panelGrid columns="4">
 
-        <p:panelGrid columns="1">
-            <p:column>
-                <p:outputLabel>Id:</p:outputLabel>
-                <p:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/> <!-- readonly = vai ser usado para carregar o id automaticamente -->
-            </p:column>
+                <p:column>
+                    <p:outputLabel value="Id:"/>
+                    <p:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/><!-- readonly = vai ser usado para carregar o id automaticamente -->
+                </p:column>
 
-            <p:column>
-                <p:outputLabel>Nome:</p:outputLabel>                                 <!-- required = vai indicar que o nome vai ter ser obrigatório -->
-                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!"/>
-            </p:column>
+                <p:column>
+                    <p:outputLabel value="Nome:"/>                                   <!-- required = vai indicar que o nome vai ter que ser obrigatório -->
+                    <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" id="idnomepessoa">
+                        <p:watermark value="Informe o nome" for="idnomepessoa"/> <!--p:watermark = vai funcionar como como o placeholder só que em primefaces -->
+                    </p:inputText>
+                </p:column>
 
-            <p:column>
-                <p:outputLabel>Sobrenome:</p:outputLabel>
+                <p:outputLabel value="Sobrenome:"/>
                 <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
-            </p:column>
 
-            <p:column>
-                <p:outputLabel>Idade:</p:outputLabel>
+                <p:outputLabel value="Idade:"/>
                 <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.idade}"/>
-            </p:column>
 
-            <p:column>
-                <p:outputLabel>Email:</p:outputLabel>
-                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.email}"/>
-            </p:column>
+                <p:outputLabel value="Salário:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.salario}"/>
 
-            <p:column>
-                <p:outputLabel>Login:</p:outputLabel>
+                <p:outputLabel value="Sexo:"/>
+                <p:selectOneMenu value="#{usuarioPessoaManagedBean.usuarioPessoa.sexo}" style="width: 150px"> <!-- selectOneMenu = é aquele famoso combobox só que em jsf, mas seleciona apenas uma opção-->
+                    <f:selectItem itemValue="MASCULINO" itemLabel="Masculino"/> <!-- selectItem = são os valores que irão dentro do selectOneMenu-->
+                    <f:selectItem itemValue="FEMININO" itemLabel="Feminino"/>          <!-- itemValue = é o que vai aparecer no banco de dados-->
+                </p:selectOneMenu>                                                           <!-- itemLabel = é o que vai aparecer na tela para o usuário-->
+
+                <p:column>
+                    <p:outputLabel value="Cep:"/>
+                    <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.cep}" pt:placeholder="Informe um cep válido">
+                        <f:ajax event="blur" execute="@this" listener="#{usuarioPessoaManagedBean.pesquisacep}"
+                            render="logradouro complemento bairro localidade uf unidade ibge gia"/>  <!--ajax = uso o ajax para eu recarregar apenas o dados do cep quando perder o foco-->
+                    </p:inputText>                                  <!-- event="blur" = sifnifica perda de foco -->                 <!-- render = vai carregar o logradouro assim que eu colocar o cep-->
+                </p:column>
+
+                <p:outputLabel value="Logradouro:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.logradouro}" id="logradouro"/>
+
+                <p:outputLabel value="Complemento:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.complemento}" id="complemento"/>
+
+                <p:outputLabel value="Bairro:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.bairro}" id="bairro"/>
+
+                <p:outputLabel value="Localidade:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.localidade}" id="localidade"/>
+
+                <p:outputLabel value="UF:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.uf}" id="uf"/>
+
+                <p:outputLabel value="Unidade:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.unidade}" id="unidade"/>
+
+                <p:outputLabel value="Ibge:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.ibge}" id="ibge"/>
+
+                <p:outputLabel value="Gia:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.gia}" id="gia"/>
+
+                <p:outputLabel value="Login:"/>
                 <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.login}"/>
-            </p:column>
 
-            <p:column>
-                <p:outputLabel>Senha:</p:outputLabel>
+                <p:outputLabel value="Senha:"/>
                 <p:password value="#{usuarioPessoaManagedBean.usuarioPessoa.senha}"/>
-            </p:column>
+
         </p:panelGrid>
 
         <br/>
         <br/>
         <p:commandButton value="Salvar" ajax="false" action="#{usuarioPessoaManagedBean.salvar}"/> <!--ajax = eu preciso colocar o ajax para poder enviar a resposta do para o servidor e salvar -->
-        <p:commandButton value="Novo" action="#{usuarioPessoaManagedBean.novo}"/>
+        <p:commandButton value="Novo" immediate="true" action="#{usuarioPessoaManagedBean.novo}">
+            <f:ajax execute="@this" render="@form"/>
+        </p:commandButton>
         <br/>
         <br/>
-        <!-- var="user" = cria uma variavel para eu acessar "usuarioPessoaManagedBean" -->
-        <h:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" border="1" cellpadding="15">  <!-- dataTable = cria uma tabela para a exibição dos dados -->
-            <f:facet name="header">Lista de usuários</f:facet>                                     <!-- cellpadding = vai servir para eu dar espaçamento na tabela -->
+    </h:form>
 
-            <h:column>
-                <f:facet name="header">Id</f:facet>
-                <h:outputText value="#{user.id}"/> <!-- outputText = cria o campo para a exibição do meu valor, nesse caso "id" -->
-            </h:column>
+    <h:form id="formtable">
+        <p:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user">
+            <p:column headerText="ID">
+                <h:outputText value="#{user.id}"/>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Nome</f:facet>
+            <p:column headerText="Nome">
                 <h:outputText value="#{user.nome}"/>
-            </h:column>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Sobrenome</f:facet>
+            <p:column headerText="Sobrenome">
                 <h:outputText value="#{user.sobrenome}"/>
-            </h:column>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Email</f:facet>
-                <h:outputText value="#{user.email}"/>
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Login</f:facet>
-                <h:outputText value="#{user.login}"/>
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Idade</f:facet>
+            <p:column headerText="Idade">
                 <h:outputText value="#{user.idade}"/>
-            </h:column>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Editar</f:facet>
-                <h:commandLink value="Editar">
-                    <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
-                </h:commandLink>
-            </h:column>
+            <p:column headerText="Salário">
+                <h:outputText value="#{user.salario}"/>
+            </p:column>
 
-            <h:column>
-                <f:facet name="header">Excluir</f:facet>
-                <h:commandLink value="Excluir" action="#{usuarioPessoaManagedBean.remover}">
-                    <f:setPropertyActionListener target="#{usuarioPessoaManagedBean.usuarioPessoa}" value="#{user}"/>
+            <p:column headerText="Login">
+                <h:outputText value="#{user.login}"/>
+            </p:column>
+
+            <p:column headerText="Editar">
+                <h:commandLink immediate="true" id="botaoeditar">
+                    <f:setPropertyActionListener value="#{user}" target="#{usuarioPessoaManagedBean.usuarioPessoa}"/>
+                    <f:ajax execute="botaoeditar" render=":formulario"/>
+                    <h:graphicImage url="resources/imagens/icon-editar.png"/>
                 </h:commandLink>
-            </h:column>
-        </h:dataTable>
+            </p:column>
+
+            <p:column headerText="Excluir">
+                <h:commandLink action="#{usuarioPessoaManagedBean.remover}" id="botaoremover">
+                    <f:setPropertyActionListener value="#{user}" target="#{usuarioPessoaManagedBean.usuarioPessoa}"/>
+                    <f:ajax execute="botaoremover" render="@form graficosalario"/>
+                    <h:graphicImage url="resources/imagens/icon-remover.png"/>
+                </h:commandLink>
+            </p:column>
+
+            <p:column headerText="Telefones">
+                <h:commandLink immediate="true" action="telefoneprimefaces.xhtml" id="botaofone">
+                    <h:graphicImage url="resources/imagens/icon-telefone.png" width="48" height="48"/>
+                    <f:param name="codigouser" value="#{user.id}"/>
+                </h:commandLink>
+            </p:column>
+
+            <p:column headerText="Emails"> <!--Aqui nessa coluna eu estou criando o botão que vou usar para carregar meu dialog (como se fosse um pop-up na tela) -->
+                <p:commandLink update=":formtable:dialogEmail" oncomplete="PF('dialogEmail').show()">
+                <f:setPropertyActionListener value="#{user}" target="#{usuarioPessoaManagedBean.usuarioPessoa}"/>
+                <h:graphicImage url="resources/imagens/icon-email.png" width="48" height="48"/>
+                </p:commandLink>
+            </p:column>
+        </p:dataTable>
+
+        <!-- dialog = é como se fosse um popup para carregar na tela -->                       <!--modal = vai servir para que eu só consiga mexer no sistema novamente quando o dialog sair -->
+        <p:dialog header="Emails" id="dialogEmail" widgetVar="dialogEmail" position="center" modal="true" width="490px" resizable="false">
+            <p:panelGrid columns="3">
+                <p:outputLabel value="Email"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.emailUser.email}" id="emailuseradd"/>
+                <p:commandButton value="Adicionar" actionListener="#{usuarioPessoaManagedBean.addEmail}" update="emailuseradd, dataTableEmail"/>
+            </p:panelGrid>
+
+            <p:dataTable value="#{usuarioPessoaManagedBean.usuarioPessoa.emailUsers}" var="email" id="dataTableEmail">
+                <p:column headerText="ID">
+                    <h:outputText value="#{email.id}"/>
+                </p:column>
+
+                <p:column headerText="Email">
+                    <h:outputText value="#{email.email}"/>
+                </p:column>
+
+                <p:column headerText="Remover">
+                    <p:commandLink id="botaoremoveremail" actionListener="#{usuarioPessoaManagedBean.removerEmail}">  <!--actionListener = uso para permanecer na tela ainda -->
+                        <f:param name="codigoemail" value="#{email.id}"/>
+                        <f:ajax execute="botaoremoveremail" render="dataTableEmail"/>
+                        <h:graphicImage url="resources/imagens/icon-remover.png"/>
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataTable>
+        </p:dialog>
 
     </h:form>
+
+    <p:chart type="bar" model="#{usuarioPessoaManagedBean.barChartModel}" id="graficosalario"/> <!--chart = estou usando para a construção do meu gráfico -->
 
 </h:body>
 </html>

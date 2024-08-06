@@ -37,7 +37,7 @@ public class TelefoneManagedBean {
         telefoneDao.salvar(telefone);
         telefone = new TelefoneUser();
         user = daoUser.pesquisar(user.getId(), UsuarioPessoa.class);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Informação", "Telefone salvo com sucesso!"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Informação: ", "Telefone salvo com sucesso!"));
 
         return "";
     }
@@ -47,7 +47,7 @@ public class TelefoneManagedBean {
         telefoneDao.deletarPoId(telefone);
         user = daoUser.pesquisar(user.getId(), UsuarioPessoa.class);
         telefone = new TelefoneUser();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Informação", "Telefone removido com sucesso!"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Informação: ", "Telefone removido com sucesso!"));
 
         return "";
 
