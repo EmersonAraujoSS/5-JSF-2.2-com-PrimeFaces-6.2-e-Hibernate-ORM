@@ -18,7 +18,6 @@ public class TesteHibernate {
         pessoa.setNome("Castelo");
         pessoa.setSenha("12345677");
         pessoa.setSobrenome("Teste");
-        pessoa.setEmail("java.avancado@gmail.com");
 
         genericDao.salvar(pessoa);
     }
