@@ -15,7 +15,7 @@
             <property name="hibernate.connection.username" value="dev_teste"/>
             <property name="hibernate.connection.password" value="dev_teste"/>
             <property name="hibernate.connection.encrypt" value="false"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.show_sql" value="true"/>

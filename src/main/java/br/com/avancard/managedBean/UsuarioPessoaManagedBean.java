@@ -2,6 +2,7 @@ package br.com.avancard.managedBean;
 
 import br.com.avancard.dao.EmailDao;
 import br.com.avancard.dao.UsuarioDao;
+import br.com.avancard.datatablelazy.LazyDataTableModelUserPessoa;
 import br.com.avancard.model.EmailUser;
 import br.com.avancard.model.UsuarioPessoa;
 import com.google.gson.Gson;
@@ -33,7 +34,7 @@ public class UsuarioPessoaManagedBean implements Serializable {
 
     //ATRIBUTOS
     private UsuarioPessoa usuarioPessoa = new UsuarioPessoa();
-    private List <UsuarioPessoa> pessoaList = new ArrayList<>();
+    private LazyDataTableModelUserPessoa<UsuarioPessoa> pessoaList = new LazyDataTableModelUserPessoa<UsuarioPessoa>();
     private UsuarioDao<UsuarioPessoa> genericDao = new UsuarioDao<UsuarioPessoa>();
     private BarChartModel barChartModel = new BarChartModel(); //BarChartModel = uso para a construção de gráficos
     private EmailUser emailUser = new EmailUser();
@@ -45,7 +46,7 @@ public class UsuarioPessoaManagedBean implements Serializable {
     //METODOS //Todo método em Jsf pode se fazer retornando uma String consigo fazer ficar na mesma tela ou redirecionar para outra tela
     @PostConstruct //PostConstruct = vai servir para que sempre que o UsuarioPessoaManagedBean for construído na memória, ele vai executar esse método apenas uma vez
     public void init(){
-        pessoaList = genericDao.listar(UsuarioPessoa.class);
+        pessoaList.load(0, 5, null, null);
         montarGrafico();
 
     }
@@ -55,7 +56,7 @@ public class UsuarioPessoaManagedBean implements Serializable {
         barChartModel = new BarChartModel();
         ChartSeries userSalario = new ChartSeries(); //GRUPO DE FUNCIONARIOS
 
-        for(UsuarioPessoa usuarioPessoa : pessoaList){ //nesse For eu estou construindo meu gráfico de salários (ADD O SALARIO PARA O GRUPO)
+        for(UsuarioPessoa usuarioPessoa : pessoaList.list){ //nesse For eu estou construindo meu gráfico de salários (ADD O SALARIO PARA O GRUPO)
             userSalario.set(usuarioPessoa.getNome(), usuarioPessoa.getSalario()); //ADD SALARIOS
         }
         barChartModel.addSeries(userSalario); //ADD O GRUPO
@@ -66,7 +67,7 @@ public class UsuarioPessoaManagedBean implements Serializable {
     public String salvar() {
 
         genericDao.salvar(usuarioPessoa);
-        pessoaList.add(usuarioPessoa);
+        pessoaList.list.add(usuarioPessoa);
         init();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Informação: ", "Salvo com sucesso!"));
         return "";
@@ -84,7 +85,7 @@ public class UsuarioPessoaManagedBean implements Serializable {
 
         try {
             genericDao.removerUsuario(usuarioPessoa);
-            pessoaList.remove(usuarioPessoa);
+            pessoaList.list.remove(usuarioPessoa);
             usuarioPessoa = new UsuarioPessoa();
             init();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Informação: ", "Removido com sucesso!"));
@@ -151,6 +152,11 @@ public class UsuarioPessoaManagedBean implements Serializable {
         FacesContext.getCurrentInstance().responseComplete();
     }
 
+    public void pesquisar(){
+        pessoaList.pesquisa(campoPesquisa);
+        montarGrafico();
+    }
+
 
     public void pesquisacep(AjaxBehaviorEvent event) {
 
@@ -193,10 +199,11 @@ public class UsuarioPessoaManagedBean implements Serializable {
     public void setUsuarioPessoa(UsuarioPessoa usuarioPessoa) {
         this.usuarioPessoa = usuarioPessoa;
     }
-    public List<UsuarioPessoa> getPessoaList() {
+    public LazyDataTableModelUserPessoa<UsuarioPessoa> getPessoaList() {
+        montarGrafico();
         return pessoaList;
     }
-    public void setPessoaList(List<UsuarioPessoa> pessoaList) {
+    public void setPessoaList(LazyDataTableModelUserPessoa<UsuarioPessoa> pessoaList) {
         this.pessoaList = pessoaList;
     }
     public BarChartModel getBarChartModel() {
