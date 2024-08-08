@@ -33,7 +33,7 @@
             <h:outputText value="#{telefoneManagedBean.user.nome}"/>
 
             <p:outputLabel>Número:</p:outputLabel>
-            <p:inputText value="#{telefoneManagedBean.telefone.numero}" required="true" requiredMessage="Número obrigatório"/>
+            <p:inputMask mask="(99) 9 9999-9999" value="#{telefoneManagedBean.telefone.numero}" required="true" requiredMessage="Número obrigatório"/>
 
             <p:outputLabel>Tipo:</p:outputLabel>
             <p:inputText value="#{telefoneManagedBean.telefone.tipo}" required="true" requiredMessage="Tipo obrigatório"/>

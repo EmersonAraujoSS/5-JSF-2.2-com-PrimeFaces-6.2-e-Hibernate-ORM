@@ -1,11 +1,12 @@
 package br.com.avancard.managedBean;
 
 import br.com.avancard.dao.EmailDao;
-import br.com.avancard.dao.GenericDao;
 import br.com.avancard.dao.UsuarioDao;
 import br.com.avancard.model.EmailUser;
 import br.com.avancard.model.UsuarioPessoa;
 import com.google.gson.Gson;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
@@ -15,14 +16,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ManagedBean(name = "usuarioPessoaManagedBean")
 @ViewScoped
@@ -31,19 +33,26 @@ public class UsuarioPessoaManagedBean implements Serializable {
 
     //ATRIBUTOS
     private UsuarioPessoa usuarioPessoa = new UsuarioPessoa();
-    private List<UsuarioPessoa> pessoaList = new ArrayList<>();
+    private List <UsuarioPessoa> pessoaList = new ArrayList<>();
     private UsuarioDao<UsuarioPessoa> genericDao = new UsuarioDao<UsuarioPessoa>();
     private BarChartModel barChartModel = new BarChartModel(); //BarChartModel = uso para a construção de gráficos
     private EmailUser emailUser = new EmailUser();
     private EmailDao<EmailUser> emailDao = new EmailDao<EmailUser>();
+    private String campoPesquisa;
+
 
 
     //METODOS //Todo método em Jsf pode se fazer retornando uma String consigo fazer ficar na mesma tela ou redirecionar para outra tela
     @PostConstruct //PostConstruct = vai servir para que sempre que o UsuarioPessoaManagedBean for construído na memória, ele vai executar esse método apenas uma vez
     public void init(){
-        barChartModel = new BarChartModel();
         pessoaList = genericDao.listar(UsuarioPessoa.class);
+        montarGrafico();
 
+    }
+
+
+    public void montarGrafico(){
+        barChartModel = new BarChartModel();
         ChartSeries userSalario = new ChartSeries(); //GRUPO DE FUNCIONARIOS
 
         for(UsuarioPessoa usuarioPessoa : pessoaList){ //nesse For eu estou construindo meu gráfico de salários (ADD O SALARIO PARA O GRUPO)
@@ -116,13 +125,39 @@ public class UsuarioPessoaManagedBean implements Serializable {
     }
 
 
+
+    public void upload(FileUploadEvent image){  //CONVERTENDO IMAGEM EM BASE 64
+        String imagem = "data:image/png;base64," + DatatypeConverter.printBase64Binary(image.getFile().getContent());
+        usuarioPessoa.setImagem(imagem);
+    }
+
+
+
+    public void download() throws IOException {
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String fileDownloadId = params.get("fileDownloadId");
+
+        UsuarioPessoa pessoa = genericDao.pesquisar(Long.parseLong(fileDownloadId), UsuarioPessoa.class);
+
+        byte[] imagem = Base64.decodeBase64(pessoa.getImagem().split("\\,")[1]);
+
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        response.addHeader("Content-Disposition", "attachment; filename=download.png");
+        response.setContentType("application/octet-stream");
+        response.setContentLength(imagem.length);
+        response.getOutputStream().write(imagem);
+        response.getOutputStream().flush();
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+
+
     public void pesquisacep(AjaxBehaviorEvent event) {
 
         try {
             URL url = new URL("https://viacep.com.br/ws/" + usuarioPessoa.getCep() + "/json/"); //consumindo WEB SERVICE DE CEP
             URLConnection connection = url.openConnection(); //URLConnection = iniciando minha conexão de cep
             InputStream inputStream = connection.getInputStream();  //InputStream = executa as configurações no servidor e retorna a informação
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8")); //BufferedReader = vai ser usado para fazer leitura de fluxo de dados
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)); //BufferedReader = vai ser usado para fazer leitura de fluxo de dados
 
             String cep = "";
             StringBuilder jsonCep = new StringBuilder(); //StringBuilder = facilita a criação e manipulação de strings de maneira eficiente.
@@ -160,6 +195,9 @@ public class UsuarioPessoaManagedBean implements Serializable {
     public List<UsuarioPessoa> getPessoaList() {
         return pessoaList;
     }
+    public void setPessoaList(List<UsuarioPessoa> pessoaList) {
+        this.pessoaList = pessoaList;
+    }
     public BarChartModel getBarChartModel() {
         return barChartModel;
     }
@@ -168,5 +206,11 @@ public class UsuarioPessoaManagedBean implements Serializable {
     }
     public void setEmailUser(EmailUser emailUser) {
         this.emailUser = emailUser;
+    }
+    public String getCampoPesquisa() {
+        return campoPesquisa;
+    }
+    public void setCampoPesquisa(String campoPesquisa) {
+        this.campoPesquisa = campoPesquisa;
     }
 }

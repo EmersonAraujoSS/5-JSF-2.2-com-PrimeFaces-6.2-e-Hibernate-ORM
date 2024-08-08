@@ -43,6 +43,9 @@ public class UsuarioPessoa implements Serializable {
     private String ibge;
     private String gia;
 
+    @Column(columnDefinition = "nvarchar(max)")
+    private String imagem;
+
     @OneToMany(mappedBy = "usuarioPessoa", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<TelefoneUser> telefoneUsers = new ArrayList<TelefoneUser>();
 
@@ -165,7 +168,12 @@ public class UsuarioPessoa implements Serializable {
     public void setEmailUsers(List<EmailUser> emailUsers) {
         this.emailUsers = emailUsers;
     }
-
+    public String getImagem() {
+        return imagem;
+    }
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
 
 
     @Override

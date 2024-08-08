@@ -29,20 +29,17 @@
         </p:growl>
         <br/>
         <br/>
-        <p:panelGrid columns="4">
+        <p:panelGrid columns="4"> <!--panelGrid = ele é utilizado para organizar elementos de interface gráfica em um formato de grade (grid) -->
 
-                <p:column>
-                    <p:outputLabel value="Id:"/>
-                    <p:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/><!-- readonly = vai ser usado para carregar o id automaticamente -->
-                </p:column>
+                <p:outputLabel value="Id:"/>
+                <p:inputText readonly="true" value="#{usuarioPessoaManagedBean.usuarioPessoa.id}"/><!-- readonly = vai ser usado para carregar o id automaticamente -->
 
-                <p:column>
-                    <p:outputLabel value="Nome:"/>                                   <!-- required = vai indicar que o nome vai ter que ser obrigatório -->
-                    <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" id="idnomepessoa">
-                        <p:watermark value="Informe o nome" for="idnomepessoa"/> <!--p:watermark = vai funcionar como como o placeholder só que em primefaces -->
-                    </p:inputText>
-                </p:column>
+                <p:outputLabel value="Nome:"/>                                   <!-- required = vai indicar que o nome vai ter que ser obrigatório -->
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.nome}" required="true" requiredMessage="Informe o nome!" id="idnomepessoa">
+                    <p:watermark value="Informe o nome" for="idnomepessoa"/> <!--p:watermark = vai funcionar como como o placeholder só que em primefaces(vai aparecer a mensagem "Informe o nome" dentro do inputText) -->
+                </p:inputText>
 
+                <p:outputLabel/>
                 <p:outputLabel value="Sobrenome:"/>
                 <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome!"/>
 
@@ -58,13 +55,11 @@
                     <f:selectItem itemValue="FEMININO" itemLabel="Feminino"/>          <!-- itemValue = é o que vai aparecer no banco de dados-->
                 </p:selectOneMenu>                                                           <!-- itemLabel = é o que vai aparecer na tela para o usuário-->
 
-                <p:column>
-                    <p:outputLabel value="Cep:"/>
-                    <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.cep}" pt:placeholder="Informe um cep válido">
-                        <f:ajax event="blur" execute="@this" listener="#{usuarioPessoaManagedBean.pesquisacep}"
-                            render="logradouro complemento bairro localidade uf unidade ibge gia"/>  <!--ajax = uso o ajax para eu recarregar apenas o dados do cep quando perder o foco-->
-                    </p:inputText>                                  <!-- event="blur" = sifnifica perda de foco -->                 <!-- render = vai carregar o logradouro assim que eu colocar o cep-->
-                </p:column>
+                <p:outputLabel value="Cep:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.cep}" pt:placeholder="Informe um cep válido">
+                    <f:ajax event="blur" execute="@this" listener="#{usuarioPessoaManagedBean.pesquisacep}"
+                        render="logradouro complemento bairro localidade uf unidade ibge gia"/>  <!--ajax = uso o ajax para eu recarregar apenas o dados do cep quando perder o foco-->
+                </p:inputText>            <!-- event="blur" = sifnifica perda de foco -->             <!-- render = vai carregar o logradouro assim que eu colocar o cep-->
 
                 <p:outputLabel value="Logradouro:"/>
                 <p:inputText value="#{usuarioPessoaManagedBean.usuarioPessoa.logradouro}" id="logradouro"/>
@@ -96,11 +91,17 @@
                 <p:outputLabel value="Senha:"/>
                 <p:password value="#{usuarioPessoaManagedBean.usuarioPessoa.senha}"/>
 
+                <p:outputLabel value="Foto"/>
+                <p:fileUpload mode="advanced" label="Adicionar" auto="true" update="imagem" listener="#{usuarioPessoaManagedBean.upload}" />
+
+                <p:outputLabel value="Imagem"/>
+                <h:graphicImage id="imagem" value="#{usuarioPessoaManagedBean.usuarioPessoa.imagem}" width="100" height="100"/>
+
         </p:panelGrid>
 
         <br/>
-        <br/>
-        <p:commandButton value="Salvar" ajax="false" action="#{usuarioPessoaManagedBean.salvar}"/> <!--ajax = eu preciso colocar o ajax para poder enviar a resposta do para o servidor e salvar -->
+        <br/>                                <!--ajax = eu preciso colocar o ajax para poder enviar a resposta do para o servidor e salvar -->
+        <p:commandButton value="Salvar" ajax="false" action="#{usuarioPessoaManagedBean.salvar}"/>
         <p:commandButton value="Novo" immediate="true" action="#{usuarioPessoaManagedBean.novo}">
             <f:ajax execute="@this" render="@form"/>
         </p:commandButton>
@@ -108,8 +109,19 @@
         <br/>
     </h:form>
 
+    <h:form>
+        <p:panel header="Consultar usuário">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Nome:"/>
+                <p:inputText value="#{usuarioPessoaManagedBean.campoPesquisa}"/>                                        <!-- COMO O MEU "graficosalario" ESTÁ FORA DO MEU FORMULÁRIO, EU USO OS DOIS PONTO ANTES ":" -->
+                <p:commandButton value="Buscar" actionListener="#{usuarioPessoaManagedBean.pesquisar}" update="formtable, :graficosalario"/> <!--actionListener = uso para permanecer na tela ainda(NÃO VOU RECARREGAR A TELA INTEIRA) -->
+            </h:panelGrid>                                                                                       <!--update = vai servir para que assim que eu clicar no botão ele recarregue o "formtable" e o "graficosalario" -->
+        </p:panel>
+    </h:form>
+
     <h:form id="formtable">
-        <p:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user">
+        <p:dataTable value="#{usuarioPessoaManagedBean.pessoaList}" var="user" rows="5" paginator="true" lazy="true"
+                     paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink}">
             <p:column headerText="ID">
                 <h:outputText value="#{user.id}"/>
             </p:column>
@@ -132,6 +144,13 @@
 
             <p:column headerText="Login">
                 <h:outputText value="#{user.login}"/>
+            </p:column>
+
+            <p:column headerText="Baixar">
+                <h:commandLink immediate="true" actionListener="#{usuarioPessoaManagedBean.download}">
+                    <f:param name="fileDownloadId" value="#{user.id}"/>
+                    <h:graphicImage url="resources/imagens/download-icon.png" width="48" height="48"/>
+                </h:commandLink>
             </p:column>
 
             <p:column headerText="Editar">
