@@ -62,6 +62,7 @@ public class UsuarioPessoaManagedBean implements Serializable {
         barChartModel.setTitle("Gráfico de salários");
     }
 
+
     public String salvar() {
 
         genericDao.salvar(usuarioPessoa);
